@@ -1,0 +1,61 @@
+name: Selenium CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Java
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '23'
+          distribution: 'temurin'
+
+      # Step 3: Install Chrome and ChromeDriver
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+          # Fetch Chrome version
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1,2)
+
+
+      # Step 4: Create config.properties dynamically
+      - name: Create config.properties
+        run: |
+          echo "username=${{ secrets.USERNAME }}" > src/test/resources/config.properties
+          echo "password=${{ secrets.PASSWORD }}" >> src/test/resources/config.properties
+          echo "password=${{ secrets.CHROMEDRIVER_PATH }}" >> src/test/resources/config.properties
+          echo "password=${{ secrets.HEADLESS_MODE }}" >> src/test/resources/config.properties
+          echo "password=${{ secrets.TEST_URL }}" >> src/test/resources/config.properties
+
+      # Step 5: Cache Maven dependencies
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Step 6: Install Maven dependencies
+      - name: Install Dependencies
+        run: mvn install
+
+      # Step 7: Run Selenium tests
+      - name: Run Tests
+        run: mvn test
