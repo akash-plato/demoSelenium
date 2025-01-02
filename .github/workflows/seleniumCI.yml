@@ -28,19 +28,30 @@ jobs:
           distribution: 'temurin'
 
       # Step 3: Install Chrome and ChromeDriver
-      # - name: Install Chrome
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y google-chrome-stable
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
 
-      #     # Fetch Chrome version
-      #     CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1,2)
+          # Fetch Chrome version
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1,2)
       - name: Install ChromeDriver
         run: sudo apt-get install -y chromium-chromedriver
 
       - name: Set ChromeDriver path
         run: echo "chromedriver_path=$(which chromedriver)" >> src/test/resources/config.properties
+            # Step 3: Install Chrome and ChromeDriver
+      # - name: Install Chrome
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y google-chrome-stable
+      #     # Fetch Chrome version
+      #     CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1,2)
+      # - name: Install ChromeDriver
+      #   run: sudo apt-get install -y chromium-chromedriver
 
+      # - name: Set ChromeDriver path
+      #   run: echo "chromedriver_path=$(which chromedriver)" >> src/test/resources/config.properties
 
       # Step 4: Create config.properties dynamically
       - name: Create config.properties
