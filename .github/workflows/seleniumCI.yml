@@ -38,22 +38,12 @@ jobs:
       - name: Install ChromeDriver
         run: sudo apt-get install -y chromium-chromedriver
 
+      # - Step 4: Set ChromeDriver path
       - name: Set ChromeDriver path
         run: echo "chromedriver_path=$(which chromedriver)" >> src/test/resources/config.properties
-            # Step 3: Install Chrome and ChromeDriver
-      # - name: Install Chrome
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y google-chrome-stable
-      #     # Fetch Chrome version
-      #     CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1,2)
-      # - name: Install ChromeDriver
-      #   run: sudo apt-get install -y chromium-chromedriver
 
-      # - name: Set ChromeDriver path
-      #   run: echo "chromedriver_path=$(which chromedriver)" >> src/test/resources/config.properties
 
-      # Step 4: Create config.properties dynamically
+      # Step 5: Create config.properties dynamically
       - name: Create config.properties
         run: |
           echo "username=${{ secrets.USERNAME }}" >> src/test/resources/config.properties
@@ -64,7 +54,7 @@ jobs:
       - name: Print config.properties
         run: cat src/test/resources/config.properties
      
-      # Step 5: Cache Maven dependencies
+      # Step 6: Cache Maven dependencies
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -73,10 +63,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Step 6: Install Maven dependencies
+      # Step 7: Install Maven dependencies
       - name: Install Dependencies
         run: mvn install
 
-      # Step 7: Run Selenium tests
+      # Step 8: Run Selenium tests
       - name: Run Tests
         run: mvn test
