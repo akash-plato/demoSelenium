@@ -16,9 +16,6 @@ jobs:
       # Step 1: Check out the repository code
       - name: Checkout Code
         uses: actions/checkout@v3
-      
-      - name: Print Code Download Path
-        run: echo "Code downloaded to ${{ github.workspace }}"
 
       # Step 2: Set up Java
       - name: Set up Java
@@ -50,9 +47,6 @@ jobs:
           echo "password=${{ secrets.PASSWORD }}" >> src/test/resources/config.properties
           echo "headless_mode=${{ secrets.HEADLESS_MODE }}" >> src/test/resources/config.properties
           echo "test_url=${{ secrets.TEST_URL }}" >> src/test/resources/config.properties
-
-      - name: Print config.properties
-        run: cat src/test/resources/config.properties
      
       # Step 6: Cache Maven dependencies
       - name: Cache Maven dependencies
